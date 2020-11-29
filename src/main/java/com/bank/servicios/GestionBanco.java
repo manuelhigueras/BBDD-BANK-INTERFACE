@@ -21,10 +21,9 @@ import java.util.List;
  *
  * @author user
  */
-public class GestionBanco implements GestionBancoInterface, GestionClienteInterface, GestionCuentasBancariasInterface{
-
-    private static final String SELECT_ALL_CLIENTES_BANCO = "SELECT * "
-            + "FROM CLIENTES " + "WHERE ID_BANCO = ? ";
+public class GestionBanco implements GestionBancoInterface{
+    
+    private static final String SELECT_ID_BANCO = "SELECT ID_BANCO, NOMBRE FROM BANCOS WHERE ID_BANCO = ?";                                                
     
     private static final String SELECT_ALL_CUENTAS_BANCARIAS_FOR_CLIENTE = "SELECT C.NOMBRE, C.APELLIDOS, CB.IBAN, CB.SALDO FROM " +
             "CLIENTES C INNER JOIN CUENTAS_BANCARIAS CB ON C.ID_CLIENTE = CB.ID_CLIENTE";
@@ -34,16 +33,26 @@ public class GestionBanco implements GestionBancoInterface, GestionClienteInterf
      */
     
     public static void main(String[] args) {
-       
+       //PRUEBAS DE FUNCIONAMIENTOS ANTES DE CONECTARLO AL GUI
+       try{
+           GestionBanco gb = new GestionBanco();
+           Banco banco = gb.getBancoPorId(1);
+           System.out.println(""+ banco.getId_banco() + " " + banco.getNombre());
+       }
+       catch(BankException ex){
+           System.out.println("ERROR EN: " + ex.getMessage());
+       }
+       catch(SQLException e){
+           System.out.println("ERROR EN: " + e.getMessage());
+       }
     }
 
     public Banco getBancoPorId(int idBanco) throws BankException, SQLException {
-        Banco banco = null;
         //INICIALIZAS
-        String query = "SELECT ID_BANCO, NOMBRE FROM BANCOS WHERE ID_BANCO = 1";
+        Banco banco = null;
         Connection con = PoolConexiones.getConexionLibre();
         try {
-            PreparedStatement ps = con.prepareStatement(query);
+            PreparedStatement ps = con.prepareStatement(SELECT_ID_BANCO);
             ps.setInt(1, idBanco);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
@@ -59,65 +68,43 @@ public class GestionBanco implements GestionBancoInterface, GestionClienteInterf
         return banco;
     }
 
-    @Override
-    public List<Cliente> getClientesPorIdBanco(int idBanco) throws BankException, SQLException {
-        List<Cliente> clientes = new ArrayList<Cliente>();
-        Connection con = PoolConexiones.getConexionLibre();
-        try{
-            PreparedStatement ps = con.prepareStatement(SELECT_ALL_CLIENTES_BANCO);
-            ps.setInt(1, idBanco);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                Cliente c = new Cliente();
-                c.setIdCliente(rs.getInt("ID_CLIENTE"));
-                c.setNombre(rs.getString("NOMBRE"));
-                c.setApellido(rs.getString("APELLIDO"));
-                c.setFechaNacimiento(rs.getDate("FECHA_NACIMIENTO"));
-                c.setIdBanco(rs.getInt("ID_BANCO"));
-                clientes.add(c);
-            }
-        }
-        finally{
-            PoolConexiones.liberaConexion(con);
-        }
-        return clientes;
-    }
 
-    @Override
-    public List<CuentaBancaria> getCuentasBancariasPorCliente(int idCliente) throws BankException, SQLException {
-        List<CuentaBancaria> cuentaBancaria = new ArrayList<CuentaBancaria>();
-        Connection con = PoolConexiones.getConexionLibre();
-        try{
-            PreparedStatement ps = con.prepareStatement(SELECT_ALL_CUENTAS_BANCARIAS_FOR_CLIENTE);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-                CuentaBancaria cb = new CuentaBancaria();
-                cb.setIdCuenta(rs.getInt("ID_CUENTA"));
-                cb.setIban(rs.getString("IBAN"));
-                cb.setSaldo(rs.getInt("SALDO"));
-                cb.setIdCliente(rs.getInt("ID_CLIENTE"));
-                cuentaBancaria.add(cb);
-            }
-        }
-        finally{
-            PoolConexiones.liberaConexion(con);
-        }
-        return cuentaBancaria;
-    }
-
-    @Override
-    public void altaNuevaCuenta(int idCliente, CuentaBancaria cuenta) throws BankException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void ingresar(int iban, double importe) throws BankException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void sacar(int iban, double importe) throws BankException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+//
+//    @Override
+//    public List<CuentaBancaria> getCuentasBancariasPorCliente(int idCliente) throws BankException, SQLException {
+//        List<CuentaBancaria> cuentaBancaria = new ArrayList<CuentaBancaria>();
+//        Connection con = PoolConexiones.getConexionLibre();
+//        try{
+//            PreparedStatement ps = con.prepareStatement(SELECT_ALL_CUENTAS_BANCARIAS_FOR_CLIENTE);
+//            ResultSet rs = ps.executeQuery();
+//            while(rs.next()){
+//                CuentaBancaria cb = new CuentaBancaria();
+//                cb.setIdCuenta(rs.getInt("ID_CUENTA"));
+//                cb.setIban(rs.getString("IBAN"));
+//                cb.setSaldo(rs.getInt("SALDO"));
+//                cb.setIdCliente(rs.getInt("ID_CLIENTE"));
+//                cuentaBancaria.add(cb);
+//            }
+//        }
+//        finally{
+//            PoolConexiones.liberaConexion(con);
+//        }
+//        return cuentaBancaria;
+//    }
+//
+//    @Override   
+//    public void altaNuevaCuenta(int idCliente, CuentaBancaria cuenta) throws BankException, SQLException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void ingresar(int iban, double importe) throws BankException, SQLException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public void sacar(int iban, double importe) throws BankException, SQLException {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//    
 }

@@ -17,9 +17,10 @@ import java.util.Objects;
  */
 public class CuentaBancaria{
     private String Iban;
-    private int idCuenta, idCliente, saldo;
+    private int idCuenta, idCliente;
+    private double saldo;
 
-    public CuentaBancaria(String Iban, int idCuenta, int idCliente, int saldo) {
+    public CuentaBancaria(String Iban, int idCuenta, int idCliente, double saldo) {
         this.Iban = Iban;
         this.idCuenta = idCuenta;
         this.idCliente = idCliente;
@@ -57,11 +58,11 @@ public class CuentaBancaria{
         this.idCliente = idCliente;
     }
 
-    public int getSaldo() {
+    public double getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(int saldo) {
+    public void setSaldo(double saldo) {
         this.saldo = saldo;
     }
 
@@ -71,7 +72,7 @@ public class CuentaBancaria{
         hash = 97 * hash + Objects.hashCode(this.Iban);
         hash = 97 * hash + this.idCuenta;
         hash = 97 * hash + this.idCliente;
-        hash = 97 * hash + this.saldo;
+        hash = (int) (97 * hash + this.saldo);
         return hash;
     }
 

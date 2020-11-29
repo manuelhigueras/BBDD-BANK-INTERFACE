@@ -10,7 +10,7 @@ public interface GestionCuentasBancariasInterface {
     
     public List<CuentaBancaria> getCuentasBancariasPorCliente(int idCliente) throws BankException, SQLException;
     public void altaNuevaCuenta(int idCliente, CuentaBancaria cuenta) throws BankException, SQLException;
-    public void ingresar(int iban, double importe) throws BankException, SQLException;;
-    public void sacar(int iban, double importe) throws BankException, SQLException;;
+    public void ingresar(String iban, double importe) throws BankException, SQLException;;
+    public void sacar(String iban, double importe) throws BankException, SQLException;;
     
 }

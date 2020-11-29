@@ -11,6 +11,7 @@ import com.bank.dominio.CuentaBancaria;
 import com.bank.excepciones.BankException;
 import com.bank.servicios.GestionBanco;
 import com.bank.servicios.GestionBancoInterface;
+import com.bank.servicios.GestionCliente;
 import com.bank.servicios.GestionClienteInterface;
 import com.bank.servicios.GestionCuentasBancariasInterface;
 import com.db.PoolConexiones;
@@ -39,9 +40,13 @@ public class ventanaBanco extends javax.swing.JFrame{
         inicializarBanco();
         if(banco != null){
             this.nameBank.setText(banco.getNombre());
+            inicializarCliente();
         }
     }
     
+    /**
+     * MUESTRA SOLO EL TITULO DEL BANCO
+     */
     public void inicializarBanco() {
         try{
            GestionBanco gb = new GestionBanco();
@@ -63,7 +68,9 @@ public class ventanaBanco extends javax.swing.JFrame{
     private void initComponents() {
 
         nameBank = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableCliente = new javax.swing.JTable();
+        btnVCBancaria = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("THE BANK");
@@ -71,6 +78,28 @@ public class ventanaBanco extends javax.swing.JFrame{
         nameBank.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         nameBank.setForeground(new java.awt.Color(51, 51, 255));
         nameBank.setText("TITULO DE BANCO");
+
+        jTableCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTableCliente);
+
+        btnVCBancaria.setText("Ver Cuentas Bancarias");
+        btnVCBancaria.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnVCBancaria.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVCBancaria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVCBancariaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -82,24 +111,46 @@ public class ventanaBanco extends javax.swing.JFrame{
                         .addGap(46, 46, 46)
                         .addComponent(nameBank))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(126, Short.MAX_VALUE))
+                        .addGap(68, 68, 68)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnVCBancaria)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(nameBank)
-                .addGap(26, 26, 26)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addComponent(btnVCBancaria)
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         nameBank.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVCBancariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVCBancariaActionPerformed
+        // TODO add your handling code here:
+        int row = jTableCliente.getSelectedRow();
+        if(row == -1){
+            JOptionPane.showMessageDialog(this,"Selecciona un cliente");
+        }
+        else{
+            //obtengo el valor de la columna 1
+            int idCliente = (Integer) (jTableCliente.getModel().getValueAt(row, 0));
+            System.out.println("id cliente " + idCliente);
+            java.awt.EventQueue.invokeLater(new Runnable(){
+                public void run() {
+                    new ventanaCuentaBanco(idCliente).setVisible(true);
+                }
+            });
+        }
+    }//GEN-LAST:event_btnVCBancariaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,8 +189,31 @@ public class ventanaBanco extends javax.swing.JFrame{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton btnVCBancaria;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableCliente;
     private javax.swing.JLabel nameBank;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * DATOS DEL CLIENTE
+     */
+    private void inicializarCliente() {
+        try{
+            GestionCliente gc = new GestionCliente();
+            List lista = gc.getClientesPorIdBanco(ID_BANCO);
+            if(lista.isEmpty()){
+                JOptionPane.showConfirmDialog(this, "No hay clientes.");
+                btnVCBancaria.setEnabled(false);
+            }
+            else{
+                jTableCliente.setModel(new ClientesDataModel(lista));
+                btnVCBancaria.setEnabled(true);
+            }
+        }
+        catch(Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
 
 }
