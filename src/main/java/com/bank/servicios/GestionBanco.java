@@ -52,7 +52,9 @@ public class GestionBanco implements GestionBancoInterface{
         Banco banco = null;
         Connection con = PoolConexiones.getConexionLibre();
         try {
+            //SELECT ID_BANCO, NOMBRE FROM BANCOS WHERE ID_BANCO = ?
             PreparedStatement ps = con.prepareStatement(SELECT_ID_BANCO);
+            //PreparedStatement ps = con.prepareStatement("SELECT * FROM BANCOS");
             ps.setInt(1, idBanco);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){

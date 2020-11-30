@@ -34,6 +34,13 @@ public class CuentaBancaria{
         this.saldo = 0;
     }
 
+    public CuentaBancaria(String iban, double saldo) {
+        this.Iban = iban;
+        this.saldo = saldo;
+        this.idCuenta = 0;
+        this.idCliente = 0;
+    }
+
     public String getIban() {
         return Iban;
     }

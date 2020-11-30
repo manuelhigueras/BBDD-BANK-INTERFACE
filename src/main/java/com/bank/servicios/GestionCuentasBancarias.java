@@ -136,5 +136,40 @@ public class GestionCuentasBancarias implements GestionCuentasBancariasInterface
     public void sacar(String iban, double importe) throws BankException, SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void hacerTransferencia(String ibanOrigen, String ibanDestino, double importe) throws BankException {
+        //Obtener conexion y libera
+        Connection con = PoolConexiones.getConexionLibre();
+       
+        try{
+            //UPDATE DE CONSULTA
+            String updateQuery = "UPDATE CUENTAS_BANCARIAS SET SALDO = 1000 WHERE IBAN LIKE 'ES56777777'";
+            con.setAutoCommit(false); //desactivo la autoconfirmacion
+            PreparedStatement pst = con.prepareStatement(updateQuery);
+            //MODIFICA VENTAS DE CAFE DE ORIGEN (+ cantidadACorregir)
+            pst.setInt(1, cantidadACorregir);
+            pst.setString(2, nombreCafeOrigen);
+            pst.executeUpdate();
+            //VENTAS DEL CAFE DE DESTINO (- cantidadACorregir)
+            pst.setInt(1, -cantidadACorregir);
+            pst.setString(2, nombreCafeDestino);
+            pst.executeUpdate();
+            con.commit();
+            
+        }
+        catch(SQLException e){
+            System.out.println("... no se pudo hacer la correcion");
+            try{
+                con.rollback();
+            }
+            catch(SQLException ex) {
+                System.out.println("ERROR: " + ex.getMessage());
+            }
+        }
+        finally{
+            PoolConexiones.liberaConexion(con);
+        }
+    }
     
 }

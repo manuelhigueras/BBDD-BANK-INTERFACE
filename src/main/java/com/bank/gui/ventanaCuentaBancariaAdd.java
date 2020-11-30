@@ -5,19 +5,33 @@
  */
 package com.bank.gui;
 
+import com.bank.dominio.CuentaBancaria;
+import com.bank.servicios.GestionCuentasBancarias;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Manuel
  */
 public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ventanaCuentaBancariaDet
-     */
-    public ventanaCuentaBancariaAdd() {
+    private int idCliente;
+    private List<CuentaBancaria> lista;
+    
+    public ventanaCuentaBancariaAdd(int idCliente, List<CuentaBancaria> lista) {
+        this.idCliente = idCliente;
         initComponents();
     }
 
+    private ventanaCuentaBancariaAdd() {
+        initComponents();
+    }
+
+    /**
+     * Creates new form ventanaCuentaBancariaDet
+     */
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,7 +48,6 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
         jTFI = new javax.swing.JTextField();
         btnAgregar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Crea cuenta bancaria");
 
         lblTitle.setText("ALTA DE CUENTA BANCARIA");
@@ -50,32 +63,36 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
         });
 
         btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblngreso)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lblBan)
-                        .addGap(11, 11, 11)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblTitle)
-                            .addComponent(jTFB, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jTFI, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(125, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAgregar)
-                .addGap(32, 32, 32))
+                .addGap(33, 33, 33))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(lblTitle))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addComponent(lblBan)
+                        .addGap(45, 45, 45)
+                        .addComponent(jTFB, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(73, 73, 73)
+                        .addComponent(lblngreso)
+                        .addGap(50, 50, 50)
+                        .addComponent(jTFI, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(188, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,11 +105,11 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
                     .addComponent(jTFB, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
                 .addComponent(btnAgregar)
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblngreso)
-                    .addComponent(jTFI, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(46, Short.MAX_VALUE))
+                    .addComponent(jTFI, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblngreso))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
@@ -102,41 +119,31 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFIActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ventanaCuentaBancariaAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ventanaCuentaBancariaAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ventanaCuentaBancariaAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ventanaCuentaBancariaAdd.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        
+        try{
+            String iban = jTFB.getText();
+            double saldo = Double.parseDouble(jTFI.getText());
+            GestionCuentasBancarias gcb = new GestionCuentasBancarias();
+            //gcb.altaNuevaCuenta(2, new CuentaBancaria("IN7585555",1,2,3000.0));
+            //String Iban, int idCuenta, int idCliente, double saldo
+            gcb.altaNuevaCuenta(idCliente, new CuentaBancaria(iban,saldo)); 
+            this.dispose();
         }
-        //</editor-fold>
-        //</editor-fold>
+        catch(Exception ex){
+            JOptionPane.showConfirmDialog(this, ex.getMessage());
+        }
+        
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ventanaCuentaBancariaAdd().setVisible(true);
-            }
-        });
-    }
+//    public static void main(){
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new ventanaCuentaBancariaAdd().setVisible(true);
+//            }
+//        });
+//    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
@@ -146,4 +153,5 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitle;
     private javax.swing.JLabel lblngreso;
     // End of variables declaration//GEN-END:variables
+
 }

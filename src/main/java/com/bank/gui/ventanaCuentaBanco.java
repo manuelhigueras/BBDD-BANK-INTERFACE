@@ -19,7 +19,7 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
     /**
      * Creates new form ventanaBanco2
      */
-    
+    private List<CuentaBancaria> lista;
     private int idCliente;
     
     public ventanaCuentaBanco(int idCliente) {
@@ -64,8 +64,18 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTableCB);
 
         btnIngresar.setText("Ingresar a la cuenta");
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
 
         btnRetirar.setText("Retirar de la cuenta");
+        btnRetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRetirarActionPerformed(evt);
+            }
+        });
 
         btnAddCB.setText("Agregar una cuenta bancaria");
         btnAddCB.addActionListener(new java.awt.event.ActionListener() {
@@ -114,9 +124,26 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCBActionPerformed
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         
+    }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void btnAddCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCBActionPerformed
+        try{
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new ventanaCuentaBancariaAdd(idCliente, lista).setVisible(true);
+                }
+            });
+        }
+        catch(Exception ex){
+
+        }
     }//GEN-LAST:event_btnAddCBActionPerformed
+
+    private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRetirarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -131,7 +158,7 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
     private void inicializaCuenta() {
         try{
             GestionCuentasBancarias gcb = new GestionCuentasBancarias();
-            List<CuentaBancaria> lista = gcb.getCuentasBancariasPorCliente(idCliente);
+            lista = gcb.getCuentasBancariasPorCliente(idCliente);
             jTableCB.setModel(new CuentaBancariaDataModel(lista));          
         }
         catch(Exception ex){
