@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.bank.gui;
-
 import com.bank.dominio.CuentaBancaria;
 import com.bank.servicios.GestionCuentasBancarias;
 import java.util.List;
@@ -16,12 +10,10 @@ import javax.swing.JOptionPane;
  */
 public class ventanaCuentaBanco extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ventanaBanco2
-     */
     private List<CuentaBancaria> lista;
+    private GestionCuentasBancarias gcb;
     private int idCliente;
-    private boolean condIngreso, condRetiro;
+    private boolean condIng, condRet;
     
     public ventanaCuentaBanco(int idCliente) {
         this.idCliente = idCliente;
@@ -40,7 +32,7 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
 
         lblTitle = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableCB = new javax.swing.JTable();
+        jTableCliente = new javax.swing.JTable();
         btnIngresar = new javax.swing.JButton();
         btnRetirar = new javax.swing.JButton();
         btnAddCB = new javax.swing.JButton();
@@ -51,7 +43,7 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
         lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitle.setText("Cuenta Bancaria");
 
-        jTableCB.setModel(new javax.swing.table.DefaultTableModel(
+        jTableCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -62,7 +54,7 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTableCB);
+        jScrollPane1.setViewportView(jTableCliente);
 
         btnIngresar.setText("Ingresar a la cuenta");
         btnIngresar.addActionListener(new java.awt.event.ActionListener() {
@@ -127,17 +119,27 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         try{
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    condIngreso = true;
-                    condRetiro = false;
-                    new ventanaIngresoRetiro(idCliente, condIngreso, condRetiro).setVisible(true);
-                    dispose();
-                }
-            });
+            gcb = new GestionCuentasBancarias();
+            lista = gcb.getCuentasBancariasPorCliente(idCliente);
+            int row = jTableCliente.getSelectedRow();
+            if(row == -1){
+                JOptionPane.showMessageDialog(this,"Selecciona un iban");
+            }
+            else{
+                //obtengo el valor de la columna 1
+                String ibanOrigen = (String) (jTableCliente.getModel().getValueAt(row, 1));
+                System.out.println(ibanOrigen);
+                java.awt.EventQueue.invokeLater(new Runnable(){
+                    public void run() {
+                        condIng = true;
+                        condRet = false;
+                        new ventanaIngresoRetiro(idCliente, ibanOrigen, lista, condIng, condRet).setVisible(true);
+                    }
+                });
+            }
         }
         catch(Exception ex){
-            
+            JOptionPane.showConfirmDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
@@ -145,29 +147,32 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
         try{
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    new ventanaCuentaBancariaAdd(idCliente, lista).setVisible(true);
+                    new ventanaCuentaBancariaAdd(idCliente).setVisible(true);
                     dispose();
                 }
             });
         }
         catch(Exception ex){
-            
+            JOptionPane.showConfirmDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_btnAddCBActionPerformed
 
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
         try{
+            gcb = new GestionCuentasBancarias();
+            lista = gcb.getCuentasBancariasPorCliente(idCliente);
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    condIngreso = false;
-                    condRetiro = true;
-                    new ventanaIngresoRetiro(idCliente, condIngreso, condRetiro).setVisible(true);
-                    dispose();
+                    condIng = false;
+                    condRet = true;
+//                    new ventanaIngresoRetiro(idCliente, lista, condIng, condRet).setVisible(true);
+//                    dispose();
+                    
                 }
             });
         }
         catch(Exception ex){
-            
+            JOptionPane.showConfirmDialog(this, ex.getMessage());
         }        
     }//GEN-LAST:event_btnRetirarActionPerformed
 
@@ -177,15 +182,15 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
     private javax.swing.JButton btnIngresar;
     private javax.swing.JButton btnRetirar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableCB;
+    private javax.swing.JTable jTableCliente;
     private javax.swing.JLabel lblTitle;
     // End of variables declaration//GEN-END:variables
 
     private void inicializaCuenta() {
         try{
-            GestionCuentasBancarias gcb = new GestionCuentasBancarias();
+            gcb = new GestionCuentasBancarias();
             lista = gcb.getCuentasBancariasPorCliente(idCliente);
-            jTableCB.setModel(new CuentaBancariaDataModel(lista));          
+            jTableCliente.setModel(new CuentaBancariaDataModel(lista));          
         }
         catch(Exception ex){
             JOptionPane.showConfirmDialog(this, ex.getMessage());

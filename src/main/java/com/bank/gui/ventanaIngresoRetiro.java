@@ -5,20 +5,33 @@
  */
 package com.bank.gui;
 
+import com.bank.dominio.CuentaBancaria;
+import com.bank.servicios.GestionCuentasBancarias;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Manuel
  */
 public class ventanaIngresoRetiro extends javax.swing.JFrame {
-
-    public ventanaIngresoRetiro(int idCliente, boolean condIngreso, boolean condRetiro) {
-        initComponents();
+    
+    private String ibanOrigen, ibanDestino;
+    private GestionCuentasBancarias gcb;
+    private List<CuentaBancaria> lista;
+    
+    public ventanaIngresoRetiro(int idCliente, String ibanOrigen, List<CuentaBancaria> lista, boolean condIngreso, boolean condRetiro) {
+        this.ibanOrigen = ibanOrigen;
+        this.lista = lista;
+        
         if(condIngreso){
             inicializarIngreso();
+            AddBotton(lista);
         }
         else if(condRetiro){
             inicializarRetiro();
         }
+        initComponents();
     }
 
     /**
@@ -45,7 +58,7 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
         lblbanOrigenIn = new javax.swing.JLabel();
         lblbanDestinoIn = new javax.swing.JLabel();
         jTFIbanOrigenIng = new javax.swing.JTextField();
-        jTFIbanDestinoIng = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("THE BANK");
@@ -55,6 +68,11 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
         lblTitleIngreso.setText("Cuanto desea ingresar:");
 
         btnIngresa.setText("Ingresa");
+        btnIngresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresaActionPerformed(evt);
+            }
+        });
 
         lblTitleRet.setText("RETIRO DE CUENTA");
 
@@ -66,21 +84,9 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
 
         lblbanDestinoRet.setText("Iban Destino");
 
-        jTFIbanOrigenRet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFIbanOrigenRetActionPerformed(evt);
-            }
-        });
-
         lblbanOrigenIn.setText("Iban Origen");
 
         lblbanDestinoIn.setText("Iban Destino");
-
-        jTFIbanDestinoIng.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTFIbanDestinoIngActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,9 +140,9 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblbanDestinoIn)
                             .addComponent(lblbanOrigenIn))
-                        .addGap(26, 26, 26)
-                        .addComponent(jTFIbanDestinoIng, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
+                        .addGap(65, 65, 65)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnIngresa)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -149,17 +155,13 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblbanOrigenIn)
                     .addComponent(jTFIbanOrigenIng, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblbanDestinoIn)
-                            .addComponent(btnIngresa))
-                        .addGap(25, 25, 25))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFIbanDestinoIng, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
+                    .addComponent(lblbanDestinoIn)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnIngresa)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitleIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -169,7 +171,7 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblbanOrigenRet)
                     .addComponent(jTFIbanOrigenRet, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblbanDestinoRet)
                     .addComponent(jTFIbanDestinoRet, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -178,24 +180,29 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitleRetiro)
                     .addComponent(jTFRetira, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTFIbanDestinoIngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFIbanDestinoIngActionPerformed
-    // TODO add your handling code here:
-    }//GEN-LAST:event_jTFIbanDestinoIngActionPerformed
-
-    private void jTFIbanOrigenRetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFIbanOrigenRetActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTFIbanOrigenRetActionPerformed
+    private void btnIngresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresaActionPerformed
+        try{           
+            //this.ibanDestino = AddBotton(lista);
+            String importeCad = jTFIngreso.getText();
+            double importe = Double.parseDouble(importeCad);
+            gcb = new GestionCuentasBancarias();
+            gcb.hacerTransferencia(ibanOrigen, ibanDestino, importe);    
+        }
+        catch(Exception ex){
+            JOptionPane.showConfirmDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnIngresaActionPerformed
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresa;
     private javax.swing.JButton btnRetira;
-    private javax.swing.JTextField jTFIbanDestinoIng;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JTextField jTFIbanDestinoRet;
     private javax.swing.JTextField jTFIbanOrigenIng;
     private javax.swing.JTextField jTFIbanOrigenRet;
@@ -213,7 +220,7 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
 
     private void inicializarRetiro() {
         btnIngresa.setVisible(false);
-        jTFIbanDestinoIng.setVisible(false);
+        //jTFIbanDestinoIng.setVisible(false);
         jTFIbanOrigenIng.setVisible(false);
         jTFIngreso.setVisible(false);
         lblTitleIng.setVisible(false);
@@ -223,14 +230,21 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
     }
 
     private void inicializarIngreso() {
-        btnRetira.setEnabled(false);
-        btnRetira.setVisible(false);
-        lblbanOrigenRet.setVisible(false);
-        lblbanDestinoRet.setVisible(false);
-        jTFIbanDestinoRet.setVisible(false);
-        jTFIbanOrigenRet.setVisible(false);
-        jTFRetira.setVisible(false);
-        lblTitleRet.setVisible(false);
-        lblTitleRetiro.setVisible(false);
+        jTFIbanOrigenIng.setEditable(false);
+        
+//        btnRetira.setVisible(false);
+//        lblbanOrigenRet.setVisible(false);
+//        lblbanDestinoRet.setVisible(false);
+//        jTFIbanDestinoRet.setVisible(false);
+//        jTFIbanOrigenRet.setVisible(false);
+//        jTFRetira.setVisible(false);
+//        lblTitleRet.setVisible(false);
+//        lblTitleRetiro.setVisible(false);
+    }
+    
+    private void AddBotton(List<CuentaBancaria> lista){
+        for(CuentaBancaria iban: lista){
+            jComboBox1.addItem(iban.getIban());
+        }
     }
 }

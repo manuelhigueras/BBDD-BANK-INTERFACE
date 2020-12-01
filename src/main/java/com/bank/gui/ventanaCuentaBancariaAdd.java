@@ -17,9 +17,8 @@ import javax.swing.JOptionPane;
 public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
 
     private int idCliente;
-    private List<CuentaBancaria> lista;
     
-    public ventanaCuentaBancariaAdd(int idCliente, List<CuentaBancaria> lista) {
+    public ventanaCuentaBancariaAdd(int idCliente) {
         this.idCliente = idCliente;
         initComponents();
     }

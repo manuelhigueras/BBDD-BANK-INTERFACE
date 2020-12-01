@@ -22,6 +22,11 @@ import java.util.List;
  */
 public class GestionCuentasBancarias implements GestionCuentasBancariasInterface{
 
+    private static final String SELECT_IBAN = "SELECT IBAN FROM CUENTAS_BANCARIAS"
+            + " WHERE ID_CLIENTE = ?";
+    
+ ///////////////////////////////////////////////////////////////////////   
+    
     private static final String SELECT_GET_CUENTAS_BANCARIAS_CLIENTE
             = "SELECT ID_CUENTA, IBAN, SALDO, ID_CLIENTE "
             + "FROM CUENTAS_BANCARIAS "
