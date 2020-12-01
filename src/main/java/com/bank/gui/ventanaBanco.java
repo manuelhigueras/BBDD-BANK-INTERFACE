@@ -6,20 +6,8 @@
 package com.bank.gui;
 
 import com.bank.dominio.Banco;
-import com.bank.dominio.Cliente;
-import com.bank.dominio.CuentaBancaria;
-import com.bank.excepciones.BankException;
 import com.bank.servicios.GestionBanco;
-import com.bank.servicios.GestionBancoInterface;
 import com.bank.servicios.GestionCliente;
-import com.bank.servicios.GestionClienteInterface;
-import com.bank.servicios.GestionCuentasBancariasInterface;
-import com.db.PoolConexiones;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import javax.swing.JOptionPane;
 

@@ -33,6 +33,9 @@ public class GestionCuentasBancarias implements GestionCuentasBancariasInterface
             + "(ID_CUENTA, IBAN, SALDO, ID_CLIENTE) " + "VALUES (?,?,?,?)";
     private static final String MAX_ID_CUENTA_BANCARIA = "SELECT MAX(ID_CUENTA) "
             + "FROM CUENTAS_BANCARIAS";
+    
+//////////////////////////////////////////////////////////////////////    
+    
     private static final String UPDATE_SALDO_CUENTA_BANCARIA_POR_IBAN = "UPDATE CUENTAS_BANCARIAS "
             + "SET SALDO = SALDO + ? " + "WHERE IBAN = ?";
     
@@ -134,29 +137,46 @@ public class GestionCuentasBancarias implements GestionCuentasBancariasInterface
 
     @Override
     public void sacar(String iban, double importe) throws BankException, SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //Obtener conexion y libera
+        Connection con = PoolConexiones.getConexionLibre();
+        try{
+            con.setAutoCommit(false); //desactivo la autoconfirmacion
+            PreparedStatement pst = con.prepareStatement(UPDATE_SALDO_CUENTA_BANCARIA_POR_IBAN);
+            //MODIFICACION DE SALDO (+ cantidadACorregir)
+            pst.setDouble(1, importe);
+            pst.setString(2, iban);
+            pst.executeUpdate();
+        }
+        catch(SQLException e){
+            System.out.println("... no se pudo hacer la correcion");
+            try{
+                con.rollback();
+            }
+            catch(SQLException ex) {
+                System.out.println("ERROR: " + ex.getMessage());
+            }
+        }
+        finally{
+            PoolConexiones.liberaConexion(con);
+        }
     }
 
     @Override
     public void hacerTransferencia(String ibanOrigen, String ibanDestino, double importe) throws BankException {
         //Obtener conexion y libera
         Connection con = PoolConexiones.getConexionLibre();
-       
         try{
-            //UPDATE DE CONSULTA
-            String updateQuery = "UPDATE CUENTAS_BANCARIAS SET SALDO = 1000 WHERE IBAN LIKE 'ES56777777'";
             con.setAutoCommit(false); //desactivo la autoconfirmacion
-            PreparedStatement pst = con.prepareStatement(updateQuery);
-            //MODIFICA VENTAS DE CAFE DE ORIGEN (+ cantidadACorregir)
-            pst.setInt(1, cantidadACorregir);
-            pst.setString(2, nombreCafeOrigen);
+            PreparedStatement pst = con.prepareStatement(UPDATE_SALDO_CUENTA_BANCARIA_POR_IBAN);
+            //MODIFICACION DE SALDO (+ cantidadACorregir)
+            pst.setDouble(1, importe);
+            pst.setString(2, ibanOrigen);
             pst.executeUpdate();
-            //VENTAS DEL CAFE DE DESTINO (- cantidadACorregir)
-            pst.setInt(1, -cantidadACorregir);
-            pst.setString(2, nombreCafeDestino);
+            //MODIFICACION DE SALDO DE OTRA CUENTA (- cantidadACorregir)
+            pst.setDouble(1, -importe);
+            pst.setString(2, ibanDestino);
             pst.executeUpdate();
             con.commit();
-            
         }
         catch(SQLException e){
             System.out.println("... no se pudo hacer la correcion");

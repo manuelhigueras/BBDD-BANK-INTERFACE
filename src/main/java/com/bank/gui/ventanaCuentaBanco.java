@@ -21,6 +21,7 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
      */
     private List<CuentaBancaria> lista;
     private int idCliente;
+    private boolean condIngreso, condRetiro;
     
     public ventanaCuentaBanco(int idCliente) {
         this.idCliente = idCliente;
@@ -125,7 +126,19 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        
+        try{
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    condIngreso = true;
+                    condRetiro = false;
+                    new ventanaIngresoRetiro(idCliente, condIngreso, condRetiro).setVisible(true);
+                    dispose();
+                }
+            });
+        }
+        catch(Exception ex){
+            
+        }
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnAddCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCBActionPerformed
@@ -133,16 +146,29 @@ public class ventanaCuentaBanco extends javax.swing.JFrame {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     new ventanaCuentaBancariaAdd(idCliente, lista).setVisible(true);
+                    dispose();
                 }
             });
         }
         catch(Exception ex){
-
+            
         }
     }//GEN-LAST:event_btnAddCBActionPerformed
 
     private void btnRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetirarActionPerformed
-        // TODO add your handling code here:
+        try{
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    condIngreso = false;
+                    condRetiro = true;
+                    new ventanaIngresoRetiro(idCliente, condIngreso, condRetiro).setVisible(true);
+                    dispose();
+                }
+            });
+        }
+        catch(Exception ex){
+            
+        }        
     }//GEN-LAST:event_btnRetirarActionPerformed
 
 

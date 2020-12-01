@@ -11,13 +11,14 @@ package com.bank.gui;
  */
 public class ventanaIngresoRetiro extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ventanaBanco3
-     */
-    public ventanaIngresoRetiro() {
+    public ventanaIngresoRetiro(int idCliente, boolean condIngreso, boolean condRetiro) {
         initComponents();
-        //inicializarIngreso();
-        //inicializarRetiro();
+        if(condIngreso){
+            inicializarIngreso();
+        }
+        else if(condRetiro){
+            inicializarRetiro();
+        }
     }
 
     /**
@@ -37,11 +38,10 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
         lblTitleRetiro = new javax.swing.JLabel();
         jTFIngreso = new javax.swing.JTextField();
         btnRetira = new javax.swing.JButton();
-        lblbanOrigen = new javax.swing.JLabel();
-        lblbanDestino = new javax.swing.JLabel();
+        lblbanOrigenRet = new javax.swing.JLabel();
+        lblbanDestinoRet = new javax.swing.JLabel();
         jTFIbanDestinoRet = new javax.swing.JTextField();
         jTFIbanOrigenRet = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         lblbanOrigenIn = new javax.swing.JLabel();
         lblbanDestinoIn = new javax.swing.JLabel();
         jTFIbanOrigenIng = new javax.swing.JTextField();
@@ -62,9 +62,15 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
 
         btnRetira.setText("Retira");
 
-        lblbanOrigen.setText("Iban Origen");
+        lblbanOrigenRet.setText("Iban Origen");
 
-        lblbanDestino.setText("Iban Destino");
+        lblbanDestinoRet.setText("Iban Destino");
+
+        jTFIbanOrigenRet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFIbanOrigenRetActionPerformed(evt);
+            }
+        });
 
         lblbanOrigenIn.setText("Iban Origen");
 
@@ -83,54 +89,55 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(43, 43, 43)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(lblbanDestino)
-                                            .addComponent(lblbanOrigen)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(25, 25, 25)
-                                        .addComponent(lblTitleRetiro)))
-                                .addGap(9, 9, 9))
-                            .addComponent(lblTitleIngreso, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jTFIbanOrigenRet, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                                        .addGap(79, 79, 79))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jTFIbanDestinoRet, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTFRetira, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btnRetira))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTFIbanDestinoIng)
-                                    .addComponent(jTFIbanOrigenIng)
-                                    .addComponent(jTFIngreso, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnIngresa))))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(144, 144, 144)
+                        .addComponent(lblTitleIng))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTitleRet)
-                            .addComponent(lblTitleIng))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(22, 22, 22))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(lblTitleRetiro)
+                                .addGap(49, 49, 49)
+                                .addComponent(jTFRetira, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(lblTitleIngreso)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(lblTitleRet)
+                                                    .addComponent(jTFIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(9, 9, 9))
+                                            .addComponent(jTFIbanOrigenIng, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 30, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jTFIbanDestinoRet, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRetira)))))
+                .addGap(21, 21, 21))
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblbanDestinoIn)
-                    .addComponent(lblbanOrigenIn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblbanDestinoRet)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblbanOrigenRet)
+                                .addGap(79, 79, 79)
+                                .addComponent(jTFIbanOrigenRet, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblbanDestinoIn)
+                            .addComponent(lblbanOrigenIn))
+                        .addGap(26, 26, 26)
+                        .addComponent(jTFIbanDestinoIng, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnIngresa)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -138,92 +145,56 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(lblTitleIng)
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblbanOrigenIn)
+                    .addComponent(jTFIbanOrigenIng, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jLabel1)
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblbanDestinoIn)
+                            .addComponent(btnIngresa))
+                        .addGap(25, 25, 25))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblbanOrigenIn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jTFIbanOrigenIng, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFIbanDestinoIng, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblbanDestinoIn)
-                    .addComponent(btnIngresa))
-                .addGap(18, 18, 18)
+                        .addComponent(jTFIbanDestinoIng, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitleIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(lblTitleRet)
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFIbanOrigenRet, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblbanOrigen))
+                    .addComponent(jTFIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFIbanDestinoRet, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblbanDestino))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnRetira)
-                        .addGap(15, 15, 15)))
+                .addComponent(lblTitleRet)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblbanOrigenRet)
+                    .addComponent(jTFIbanOrigenRet, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblbanDestinoRet)
+                    .addComponent(jTFIbanDestinoRet, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRetira))
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTitleRetiro)
-                    .addComponent(jTFRetira, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jTFRetira, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTFIbanDestinoIngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFIbanDestinoIngActionPerformed
-        // TODO add your handling code here:
+    // TODO add your handling code here:
     }//GEN-LAST:event_jTFIbanDestinoIngActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ventanaIngresoRetiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ventanaIngresoRetiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ventanaIngresoRetiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ventanaIngresoRetiro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ventanaIngresoRetiro().setVisible(true);
-            }
-        });
-    }
-
+    private void jTFIbanOrigenRetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFIbanOrigenRetActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFIbanOrigenRetActionPerformed
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnIngresa;
     private javax.swing.JButton btnRetira;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField jTFIbanDestinoIng;
     private javax.swing.JTextField jTFIbanDestinoRet;
     private javax.swing.JTextField jTFIbanOrigenIng;
@@ -234,25 +205,32 @@ public class ventanaIngresoRetiro extends javax.swing.JFrame {
     private javax.swing.JLabel lblTitleIngreso;
     private javax.swing.JLabel lblTitleRet;
     private javax.swing.JLabel lblTitleRetiro;
-    private javax.swing.JLabel lblbanDestino;
     private javax.swing.JLabel lblbanDestinoIn;
-    private javax.swing.JLabel lblbanOrigen;
+    private javax.swing.JLabel lblbanDestinoRet;
     private javax.swing.JLabel lblbanOrigenIn;
+    private javax.swing.JLabel lblbanOrigenRet;
     // End of variables declaration//GEN-END:variables
 
     private void inicializarRetiro() {
+        btnIngresa.setVisible(false);
+        jTFIbanDestinoIng.setVisible(false);
+        jTFIbanOrigenIng.setVisible(false);
+        jTFIngreso.setVisible(false);
         lblTitleIng.setVisible(false);
         lblTitleIngreso.setVisible(false);
-        jTFIngreso.setVisible(false);
-        btnIngresa.setVisible(false);
-        btnIngresa.setEnabled(false);
+        lblbanDestinoIn.setVisible(false);
+        lblbanOrigenIn.setVisible(false);    
     }
 
     private void inicializarIngreso() {
+        btnRetira.setEnabled(false);
+        btnRetira.setVisible(false);
+        lblbanOrigenRet.setVisible(false);
+        lblbanDestinoRet.setVisible(false);
+        jTFIbanDestinoRet.setVisible(false);
+        jTFIbanOrigenRet.setVisible(false);
+        jTFRetira.setVisible(false);
         lblTitleRet.setVisible(false);
         lblTitleRetiro.setVisible(false);
-        jTFRetira.setVisible(false);
-        btnRetira.setVisible(false);
-        btnRetira.setEnabled(false);
     }
 }

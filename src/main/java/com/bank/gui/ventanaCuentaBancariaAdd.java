@@ -24,10 +24,6 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
         initComponents();
     }
 
-    private ventanaCuentaBancariaAdd() {
-        initComponents();
-    }
-
     /**
      * Creates new form ventanaCuentaBancariaDet
      */
@@ -129,22 +125,18 @@ public class ventanaCuentaBancariaAdd extends javax.swing.JFrame {
             //String Iban, int idCuenta, int idCliente, double saldo
             gcb.altaNuevaCuenta(idCliente, new CuentaBancaria(iban,saldo)); 
             this.dispose();
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new ventanaCuentaBanco(idCliente).setVisible(true);
+                }
+            });
         }
         catch(Exception ex){
             JOptionPane.showConfirmDialog(this, ex.getMessage());
         }
         
     }//GEN-LAST:event_btnAgregarActionPerformed
-
-//    public static void main(){
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new ventanaCuentaBancariaAdd().setVisible(true);
-//            }
-//        });
-//    }
-    
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JTextField jTFB;
